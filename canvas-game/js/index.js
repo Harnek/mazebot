@@ -11,7 +11,6 @@ var statusBarContainer;
 var game;
 
 window.onload = function() {
-
   // Set up the maze game
   statusBarContainer = document.getElementById('status-bar');
 
@@ -31,7 +30,7 @@ window.onload = function() {
   // hook up our two buttons that start a maze (on start and after a maze is completed)
   document.getElementById('start').addEventListener('click', startNewMaze);
   document.getElementById('next-maze').addEventListener('click', startNewMaze);
-}
+};
 
 function startNewMaze() {
   //
@@ -44,6 +43,7 @@ function startNewMaze() {
       setPhase('playing');
       game.startMaze(r, onSolution);
       handleResize();
+      runSolver(r);
     },
     function(err) {
       document.getElementById('error-message').innerText = err.message;
@@ -64,7 +64,10 @@ function setPhase(phase) {
 }
 
 function handleResize() {
-  game.setDisplaySize(window.innerWidth, window.innerHeight - statusBarContainer.clientHeight);
+  game.setDisplaySize(
+    window.innerWidth,
+    window.innerHeight - statusBarContainer.clientHeight
+  );
 }
 
 // when a maze is solved, show the results div and await a click to continue

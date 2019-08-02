@@ -9,7 +9,7 @@
 // If you want to add support for vim or emacs keys, this is the place to do it.
 //
 function MazeInput(coordinates, overlay) {
-  function noop() { } // ;^)
+  function noop() {} // ;^)
 
   var mouseOrTouchActive = false;
   var mousePos = [];
@@ -21,7 +21,7 @@ function MazeInput(coordinates, overlay) {
 
   var last10 = [];
 
-  document.addEventListener('gesturestart', function (e) {
+  document.addEventListener('gesturestart', function(e) {
     e.preventDefault();
   });
 
@@ -39,7 +39,7 @@ function MazeInput(coordinates, overlay) {
   overlay.addEventListener('touchmove', handleTouchmove);
 
   return {
-    setHandlers: setHandlers
+    setHandlers: setHandlers,
   };
 
   // these are the handlers that are invoked when a position is clicked
@@ -130,7 +130,7 @@ function MazeInput(coordinates, overlay) {
       Left: 'W',
       Up: 'N',
       Down: 'S',
-    }
+    };
 
     if (checkKonami(key)) console.log('KONAMI CODE ACTIVATED');
     var direction = directions[key];
@@ -141,7 +141,18 @@ function MazeInput(coordinates, overlay) {
   // ohai what's this?
   // this would be a good place to invoke a maze solver if you had one.
   function checkKonami(code) {
-    var k = ['Up', 'Up', 'Down', 'Down', 'Left', 'Right', 'Left', 'Right', 'b', 'a'];
+    var k = [
+      'Up',
+      'Up',
+      'Down',
+      'Down',
+      'Left',
+      'Right',
+      'Left',
+      'Right',
+      'b',
+      'a',
+    ];
     last10.push(code);
     if (last10.length > 10) last10.shift();
     if (last10.length !== 10) return false;

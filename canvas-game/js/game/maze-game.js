@@ -9,7 +9,6 @@ function MazeGame(
   width,
   height
 ) {
-
   var currentMaze = null;
   var onSolution;
   var currentPosition = null;
@@ -44,7 +43,7 @@ function MazeGame(
     startMaze: startMaze,
 
     // when the screen size changes, re-render and configure the coordinate system
-    setDisplaySize: setDisplaySize
+    setDisplaySize: setDisplaySize,
   };
 
   function startMaze(maze, onSolution_) {
@@ -63,7 +62,12 @@ function MazeGame(
       // There are three stacked canvases:
       // the map, the avatar path, and the overlay with the avatar and goal.
       // Only the overlay is animated, so it is updated here
-      renderer.updateOverlay(currentPosition, moves[moves.length - 1], currentMaze.endingPosition, time);
+      renderer.updateOverlay(
+        currentPosition,
+        moves[moves.length - 1],
+        currentMaze.endingPosition,
+        time
+      );
     }
 
     // do it again
@@ -72,6 +76,7 @@ function MazeGame(
 
   // Configure the gmae with a new maze
   function setMaze(maze) {
+    tempMaze = maze;
     currentMaze = maze;
     currentPosition = maze.startingPosition;
 
@@ -81,15 +86,18 @@ function MazeGame(
 
     // set up the coordinate system that everything else relies upon
     coordinates.setMapSize(maze.map[0].length, maze.map.length);
-    coordinates.zoom(maze.startingPosition)
+    coordinates.zoom(maze.startingPosition);
 
     // set the map in the renderer, which will kick off map rendering etc.
     renderer.setMap(maze.map);
     statusBar.setMaze(maze);
 
     // turn input on. We ignore input when there is no game active.
-    mazeInput.setHandlers(handleInputCell, handleInputDirection, handleInputZoom);
-
+    mazeInput.setHandlers(
+      handleInputCell,
+      handleInputDirection,
+      handleInputZoom
+    );
   }
 
   // user requested zoom, optionally with a position
@@ -97,8 +105,7 @@ function MazeGame(
   function handleInputZoom(position) {
     if (coordinates.zoomed()) {
       coordinates.unzoom();
-    }
-    else {
+    } else {
       coordinates.zoom(position || currentPosition);
     }
 
@@ -154,9 +161,12 @@ function MazeGame(
       S: [0, 1],
       W: [-1, 0],
       E: [1, 0],
-    }
+    };
 
-    return [currentPosition[0] + offsets[d][0], currentPosition[1] + offsets[d][1]];
+    return [
+      currentPosition[0] + offsets[d][0],
+      currentPosition[1] + offsets[d][1],
+    ];
   }
 
   // Check to see if we are at the goal.
@@ -170,8 +180,8 @@ function MazeGame(
     ) {
       mazeInput.setHandlers(null, null);
       postJson(currentMaze.mazePath, {
-        directions: moves.join('')
-      }).then(function (result) {
+        directions: moves.join(''),
+      }).then(function(result) {
         onSolution(result);
       });
     }
@@ -183,12 +193,8 @@ function MazeGame(
     var map = currentMaze.map;
 
     // out of bounds
-    if (
-      p[0] < 0 ||
-      p[1] < 0 ||
-      p[0] >= map[0].length ||
-      p[1] >= map.length
-    ) return false;
+    if (p[0] < 0 || p[1] < 0 || p[0] >= map[0].length || p[1] >= map.length)
+      return false;
 
     // wall
     if (map[p[1]][p[0]] === 'X') return false;
